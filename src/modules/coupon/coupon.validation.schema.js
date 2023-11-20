@@ -10,4 +10,7 @@ export const addCouponSchema = {
     isFixed: Joi.boolean().optional(),
     couponAssignedtoUsers: Joi.array().items().required(),
   }).required(),
+  headers: Joi.object({
+    test: Joi.string().required(),
+  }).options({ allowUnknown: true }),
 }

@@ -1,7 +1,7 @@
 import { userModel } from "../../DB/models/user.model.js";
 import { generateToken,verifyToken } from "../utils/tokenfunctions.js";
 //=======================user authentkated or not====================
-export const isAuth=()=>{
+export const isAuth=(roles)=>{
     return async(req,res,next)=>{
 try{        
 const {authorization}=req.headers
@@ -22,13 +22,19 @@ const decodedData=verifyToken(
 )
 const findUser=await userModel.findById(
     decodedData.id,
+    'email userName role'
 )
 //console.log(findUser)
 if(!findUser){
     return next(new Error('please signup',{cause :400}))
 }    
-req.authuser=findUser
+
+//==================authorization===================
 //console.log(req.authuser)
+if(!roles.includes(findUser.role)){
+  return next(new Error('unouthrized access to API ',{cause :400}))
+}
+req.authuser=findUser
 next()  
 }
 
@@ -73,6 +79,7 @@ catch (error) {
        })
        console.log(updatedUserToken)
       // res.status(200).json({ message: 'Token refreshed', updatedUserToken })
+
        next()
     }
     return next(new Error('invalid token', { cause: 500 }))

@@ -2,11 +2,13 @@
 import { conectDB } from "../../DB/dbConnection.js"
 import { globalMiddleWare } from "./asyncHandler.js"
 import * as routers from '../modules/indexRoutes.js'
+import cors from 'cors'
 import { changeCouponStatus } from "./crone.js"
 export const iniateApp=(app,express)=>{
     const port =process.env.port
     app.use(express.json())
 conectDB()
+app.use(cors())
 app.use('/cat', routers.categoryRouter)
 app.use('/sub',routers.subcategoryRouter)
 app.use('/brand',routers.brandRouter)

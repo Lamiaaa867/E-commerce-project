@@ -3,6 +3,7 @@ import { userModel } from "../../../DB/models/user.model.js"
 
 
 export const addCoupon=async(req,res,next)=>{
+  const { test } = req.headers 
     const {
         couponCode,
         couponAmount,
